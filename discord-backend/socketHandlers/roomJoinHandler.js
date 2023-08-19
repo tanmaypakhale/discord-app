@@ -12,6 +12,14 @@ const roomJoinHandler = (socket,data) => {
     const roomDetails = serverStore.getActiveRoom(roomId);
     serverStore.joinActiveRoom(roomId, participantDetails);
 
+    roomDetails.participant.forEach((participant) => {
+        if(participant.socketId !== participantDetails.socketId){
+            socket.to(participant.socketId).emit('conn-prepare',{
+                connUserSocketId: participantDetails.socketId,
+            });
+        }
+    })
+
     roomsUpdates.updateRooms(); 
 }
 
