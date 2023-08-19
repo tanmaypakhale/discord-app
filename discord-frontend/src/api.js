@@ -2,7 +2,7 @@ import axios from "axios";
 import { logout } from "./shared/utils/auth";
 
 const apiClient = axios.create({
-    baseURL: 'https://discord-backend-rae7.onrender.com/api',
+    baseURL: 'https://new-discord.onrender.com/api',
     timeout: 5000,
 })
 
