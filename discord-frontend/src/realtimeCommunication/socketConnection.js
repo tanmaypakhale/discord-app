@@ -3,6 +3,7 @@ import { setPendingFriendsInvitations , setFriends , setOnlineUsers} from "../st
 import store from "../store/store"
 import { updateDirectChatHistoryIfActive } from "../shared/utils/chat";
 import * as roomHandler from './roomHandler'
+import * as webRTCHandler from './webRTCHandler'
 let socket = null;
 
 export const connectWithSocketServer = (userDetails) => {
@@ -45,13 +46,14 @@ export const connectWithSocketServer = (userDetails) => {
     socket.on('active-rooms',data => {
         roomHandler.updateActiveRooms(data);
         
-    })
+    });
 
     socket.on('conn-prepare',(data) => {
-        console.log('prepare for connection');
-        console.log(data);
-    })
-}
+        const { connUserSocketId } = data;
+        webRTCHandler.prepareNewPeerConnection(connUserSocketId, false);
+        socket.emit('conn-init', { connUserSocketId: connUserSocketId});
+    });
+};
 
 export const sendDirectMessage = (data) => {
     // console.log(data);
