@@ -20,7 +20,8 @@ export const newRoomCreated = (data) => {
 
 export const updateActiveRooms = (data) => {
     const {activeRooms} = data;
-    //console.log(activeRooms);
+    console.log('update came from server')
+    console.log(activeRooms);
     const friends = store.getState().friends.friends;
     let rooms = [];
 

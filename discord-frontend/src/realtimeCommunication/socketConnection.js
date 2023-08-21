@@ -45,13 +45,21 @@ export const connectWithSocketServer = (userDetails) => {
 
     socket.on('active-rooms',data => {
         roomHandler.updateActiveRooms(data);
-        
     });
 
     socket.on('conn-prepare',(data) => {
         const { connUserSocketId } = data;
         webRTCHandler.prepareNewPeerConnection(connUserSocketId, false);
         socket.emit('conn-init', { connUserSocketId: connUserSocketId});
+    });
+
+    socket.on('conn-init',(data) => {
+        const { connUserSocketId } = data;
+        webRTCHandler.prepareNewPeerConnection(connUserSocketId,true);
+    });
+
+    socket.on('conn-signal', (data) => {
+        webRTCHandler.handleSignalingData(data);
     });
 };
 
@@ -75,4 +83,8 @@ export const joinRoom = (data) => {
 
 export const leaveRoom = (data) => {
     socket.emit('room-leave', data);
+}
+
+export const signalPeerData = (data) => {
+    socket.emit('conn-signal', data);
 }
