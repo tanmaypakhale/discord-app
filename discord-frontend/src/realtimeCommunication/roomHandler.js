@@ -1,4 +1,4 @@
-import { setActiveRooms, setLocalStream, setOpenRoom, setRoomDetails } from '../store/actions/roomActions'
+import { setActiveRooms, setLocalStream, setOpenRoom, setRemoteStreams, setRoomDetails } from '../store/actions/roomActions'
 import store from '../store/store'
 import * as socketConnection from './socketConnection'
 import * as webRTCHandler from './webRTCHandler'
@@ -53,6 +53,9 @@ export const leaveRoom = () => {
         localStream.getTracks().forEach((track) => track.stop());
         store.dispatch(setLocalStream(null));
     }
+    store.dispatch(setRemoteStreams([]));
+    webRTCHandler.closeAllConnections();
+
     socketConnection.leaveRoom({roomId});
     store.dispatch(setRoomDetails(null));
     store.dispatch(setOpenRoom(false, false));
